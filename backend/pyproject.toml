@@ -1,9 +1,0 @@
-[project]
-name = "HelpdeskAssistant"
-version = "0.1.0"
-requires-python = ">=3.13"
-dependencies = [
-    "dotenv>=0.9.9",
-    "fastapi[standard]>=0.115.12",
-    "google>=3.0.0",
-]
