@@ -7,12 +7,6 @@ export interface Message {
 };
 
 function App() {
-  const [messageHistory, setMessageHistory] = useState([{user: "assistant", message: "Hi, how can I help you today?"}]);
-
-  const updateHistory = (newMessage: Message) => {
-    setMessageHistory((prevHistory) => [...prevHistory, newMessage]);
-  }
-
   const apiSanityCheck = async () => {
     try {
       const repsonse = await fetch('http://localhost:8000/', {
@@ -35,6 +29,12 @@ function App() {
     }
   }
   apiSanityCheck(); // Call the API sanity check to generate the cookie
+
+  const [messageHistory, setMessageHistory] = useState([{user: "assistant", message: "Hi, how can I help you today?"}]);
+
+  const updateHistory = (newMessage: Message) => {
+    setMessageHistory((prevHistory) => [...prevHistory, newMessage]);
+  }
 
   return (
     <div className="App h-screen">

@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 from . import gemini
+import json
 
 app = FastAPI()
 
@@ -38,12 +39,12 @@ def read_root():
     return JSONResponse({'response': 'default backend response'})
 
 @app.get("/chat")
-def get_chat_history(session_id: str = Cookie(None)):
+async def get_chat_history(session_id: str = Cookie(None)):
     if not session_id:
         raise HTTPException(status_code=400, detail="Session ID not found")
     geminiclient = get_gemini_client(session_id)
-    history = geminiclient.get_chat_history()
-    return JSONResponse({'response': history})
+    history = geminiclient.get_history()
+    return JSONResponse(json.loads(json.dumps({'messages': history})))
 
 @app.post("/chat")
 async def ask_gemini(request: Request, session_id: str = Cookie(None)):
@@ -55,7 +56,7 @@ async def ask_gemini(request: Request, session_id: str = Cookie(None)):
         raise HTTPException(status_code=400, detail="Prompt is required")
     geminiclient = get_gemini_client(session_id)
     response = geminiclient.message(prompt)
-    return JSONResponse({'response': response})
+    return JSONResponse(json.loads(response))
 
 @app.delete("/chat")
 def reset_chat(session_id: str = Cookie(None)):
