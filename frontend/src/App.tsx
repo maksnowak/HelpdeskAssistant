@@ -1,7 +1,7 @@
 import FormView from "./components/FormView";
 import MessageHistory from "./components/MessageHistory"
 import MessageInput from "./components/MessageInput"
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 export interface Message {
   user: string;
   message: string;
@@ -16,6 +16,8 @@ export interface FormData {
 }
 
 function App() {
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
   const apiSanityCheck = async () => {
     try {
       const repsonse = await fetch('http://localhost:8000/', {
@@ -78,6 +80,12 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
+    }
+  }, [messageHistory]);
+
   const onResetChat = () => {
     setMessageHistory([{user: 'assistant', message: 'Hello! How can I help you today?'}]);
     setFormData({firstname: '', lastname: '', email: '', reason_of_contact: '', urgency: 0});
@@ -88,7 +96,7 @@ function App() {
     <div className="App h-screen flex flex-col">
       <h1 className="text-center text-2xl font-bold p-4">Helpdesk Assistant</h1>
       <div className="flex flex-1 overflow-hidden">
-        <div className="flex-grow overflow-auto">
+        <div className="flex-grow overflow-auto" ref={chatContainerRef}>
           <MessageHistory messages={messageHistory} />
         </div>
         {showForm && (
