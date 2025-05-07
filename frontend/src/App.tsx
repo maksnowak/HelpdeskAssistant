@@ -1,15 +1,13 @@
 import MessageHistory from "./components/MessageHistory"
 import MessageInput from "./components/MessageInput"
+import { useState } from "react";
 
 function App() {
-  let mockMessages = [
-    { user: "user", message: "Hello, how are you?" },
-    { user: "assistant", message: "I'm fine, thank you!" }
-  ];
+  const [messageHistory, setMessageHistory] = useState([{user: "assistant", message: "Hi, how can I help you today?"}]);
   return (
     <div className="App h-screen">
       <h1 className="text-center text-2xl font-bold p-4 h-1/10">Helpdesk Assistant</h1>
-      <MessageHistory messages={mockMessages} />
+      <MessageHistory messages={messageHistory} />
       <MessageInput />
     </div>
   )
