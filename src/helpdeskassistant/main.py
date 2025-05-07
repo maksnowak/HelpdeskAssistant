@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Request, Response, Cookie, HTTPException
+from fastapi import FastAPI, Request, Cookie, HTTPException
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from uuid import uuid4
 from . import gemini
@@ -34,7 +35,7 @@ app.add_middleware(
 
 @app.get("/")
 def read_root():
-    return {"Hello": "World"}
+    return JSONResponse({'response': 'default backend response'})
 
 @app.get("/chat")
 def get_chat_history(session_id: str = Cookie(None)):
@@ -42,7 +43,7 @@ def get_chat_history(session_id: str = Cookie(None)):
         raise HTTPException(status_code=400, detail="Session ID not found")
     geminiclient = get_gemini_client(session_id)
     history = geminiclient.get_chat_history()
-    return Response(history)
+    return JSONResponse({'response': history})
 
 @app.post("/chat")
 async def ask_gemini(request: Request, session_id: str = Cookie(None)):
@@ -54,7 +55,7 @@ async def ask_gemini(request: Request, session_id: str = Cookie(None)):
         raise HTTPException(status_code=400, detail="Prompt is required")
     geminiclient = get_gemini_client(session_id)
     response = geminiclient.message(prompt)
-    return Response(response)
+    return JSONResponse({'response': response})
 
 @app.delete("/chat")
 def reset_chat(session_id: str = Cookie(None)):
@@ -62,4 +63,4 @@ def reset_chat(session_id: str = Cookie(None)):
         raise HTTPException(status_code=400, detail="Session ID not found")
     geminiclient = get_gemini_client(session_id)
     geminiclient.reset_chat()
-    return Response("Chat reset successfully")
+    return JSONResponse({'response': 'Chat reset successfully'})

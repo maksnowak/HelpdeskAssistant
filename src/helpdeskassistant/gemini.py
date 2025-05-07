@@ -19,6 +19,7 @@ Ask the following questions to get the form fields provided in parenthesis:
 4. How urgent is the issue (1-10) - propose the number yourself and ask the user if that's ok; if not, ask for their input.
 Keep the conversation natural and friendly as if they were talking to a human - you can provide simple explanations, but do not provide any solutions.
 After each response, return the following JSON object after an empty line:
+```json
 {
     "firstname": str,
     "lastname": str,
@@ -26,12 +27,13 @@ After each response, return the following JSON object after an empty line:
     "reason": str,
     "urgency": int 
 }
+```
 When the user provides all the information, say "Thank you for your input. Your request has been submitted." and end the conversation.
 """
 
         self.chat = self.client.chats.create(
             model=self.model,
-            config=types.GenerateContentConfig(system_instruction=self.context)
+            config=types.GenerateContentConfig(system_instruction=self.context, temperature=0.9)
         )
 
     def message(self, prompt):
@@ -44,5 +46,5 @@ When the user provides all the information, say "Thank you for your input. Your 
     def reset_chat(self):
         self.chat = self.client.chats.create(
             model=self.model,
-            config=types.GenerateContentConfig(system_instruction=self.context)
+            config=types.GenerateContentConfig(system_instruction=self.context, temperature=0.9)
         )
