@@ -1,15 +1,4 @@
-from . import gemini
+import uvicorn
 
 def main():
-    gem = gemini.Gemini()
-
-    print("Gemini: Hello! How can I help you today?")
-    while True:
-        user_input = input("You: ")
-        if user_input.lower() == "exit":
-            break
-
-        response = gem.message(user_input)
-        print("Gemini:", response)
-
-    print("Gemini: Goodbye!")
+    uvicorn.run('helpdeskassistant.main:app', host='127.0.0.1', port=8000, reload=True)
