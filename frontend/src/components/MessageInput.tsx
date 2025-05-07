@@ -1,9 +1,16 @@
 import { useState } from 'react';
-import type { Message } from '../App';
+import type { Message, FormData } from '../App';
 
-function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
+function MessageInput({ 
+  onSend, 
+  submitted, 
+  setSubmitted 
+}: { 
+  onSend: (message: Message, formFields?: FormData) => void,
+  submitted: boolean,
+  setSubmitted: (submitted: boolean) => void
+}) {
     const [message, setMessage] = useState('');
-    const [submitted, setSubmitted] = useState(false);
 
     const handleSendMessage = async () => {
         if (!message.trim() || submitted) return;
@@ -30,7 +37,7 @@ function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
             });
             
             if (response && response.response) {
-                onSend({ user: 'assistant', message: response.response });
+                onSend({ user: 'assistant', message: response.response }, response.form);
             } else {
                 console.error('Unexpected response format:', response);
             }
@@ -43,7 +50,7 @@ function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
     };
 
     return (
-        <div className="flex items-center justify-between p-4 h-1/10 inset-x-0 bottom-0">
+        <div className="flex flex-grow">
             <input
                 type="text"
                 placeholder="Type your message..."
