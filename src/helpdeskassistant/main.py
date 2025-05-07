@@ -38,14 +38,6 @@ app.add_middleware(
 def read_root():
     return JSONResponse({'response': 'default backend response'})
 
-@app.get("/chat")
-async def get_chat_history(session_id: str = Cookie(None)):
-    if not session_id:
-        raise HTTPException(status_code=400, detail="Session ID not found")
-    geminiclient = get_gemini_client(session_id)
-    history = geminiclient.get_history()
-    return JSONResponse(json.loads(json.dumps({'messages': history})))
-
 @app.post("/chat")
 async def ask_gemini(request: Request, session_id: str = Cookie(None)):
     if not session_id:

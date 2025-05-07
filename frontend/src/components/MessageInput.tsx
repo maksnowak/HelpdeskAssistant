@@ -3,9 +3,10 @@ import type { Message } from '../App';
 
 function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
     const [message, setMessage] = useState('');
+    const [submitted, setSubmitted] = useState(false);
 
     const handleSendMessage = async () => {
-        if (!message.trim()) return;
+        if (!message.trim() || submitted) return;
         
         onSend({user: 'user', message: message});
         setMessage('');
@@ -33,6 +34,9 @@ function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
             } else {
                 console.error('Unexpected response format:', response);
             }
+            if (response && response.submitted) {
+                setSubmitted(response.submitted);
+            }
         } catch (error) {
             console.error('Error sending message:', error);
         }
@@ -43,16 +47,18 @@ function MessageInput({ onSend }: { onSend: ( message: Message ) => void }) {
             <input
                 type="text"
                 placeholder="Type your message..."
-                className="flex-grow p-2 border rounded"
+                className={`flex-grow p-2 border rounded ${submitted ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleSendMessage();
+                    if (e.key === 'Enter' && !submitted) handleSendMessage();
                 }}
+                disabled={submitted}
             />
             <button 
-                className="ml-2 px-4 py-2 text-white rounded"
+                className={`ml-2 px-4 py-2 text-white rounded ${submitted ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-500 hover:bg-blue-700'}`}
                 onClick={handleSendMessage}
+                disabled={submitted}
             >
                 Send
             </button>

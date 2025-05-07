@@ -1,6 +1,6 @@
 import MessageHistory from "./components/MessageHistory"
 import MessageInput from "./components/MessageInput"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 export interface Message {
   user: string;
   message: string;
@@ -28,9 +28,36 @@ function App() {
       console.error('Error checking API:', error);
     }
   }
-  apiSanityCheck(); // Call the API sanity check to generate the cookie
 
-  const [messageHistory, setMessageHistory] = useState([{user: "assistant", message: "Hi, how can I help you today?"}]);
+  const resetChat = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/chat', {
+        method: 'DELETE',
+        credentials: 'include',
+      }).then((res) => {
+        if (res.status === 200) {
+          return res.json();
+        } else {
+          throw new Error(res.statusText);
+        }
+      });
+
+      if (response && response.response) {
+        console.log(response.response);
+      } else {
+        console.error('Unexpected response format:', response);
+      }
+    } catch (error) {
+      console.error('Error resetting chat:', error);
+    }
+  }
+
+  useEffect(() => {
+    apiSanityCheck();
+    resetChat();
+  }, []);
+
+  const [messageHistory, setMessageHistory] = useState([{user: 'assistant', message: 'Hello! How can I help you today?'}]);
 
   const updateHistory = (newMessage: Message) => {
     setMessageHistory((prevHistory) => [...prevHistory, newMessage]);
