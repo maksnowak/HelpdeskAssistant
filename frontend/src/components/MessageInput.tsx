@@ -1,12 +1,12 @@
 function MessageInput() {
     return (
-        <div className="flex items-center justify-between p-4 bg-gray-100">
+        <div className="flex items-center justify-between p-4 h-auto inset-x-0 bottom-0">
             <input
                 type="text"
                 placeholder="Type your message..."
-                className="flex-grow p-2 border border-gray-300 rounded"
+                className="flex-grow p-2 border rounded"
             />
-            <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded">Send</button>
+            <button className="ml-2 px-4 py-2 text-white rounded">Send</button>
         </div>
     )
 }

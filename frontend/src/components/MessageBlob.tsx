@@ -15,14 +15,14 @@ function MessageBlob({ user, message }: { user: string; message: string }) {
     else {
         msg = (
             <div className="flex justify-start">
-                <div className="bg-gray-300 p-2 rounded-lg max-w-xs">
+                <div className="bg-stone-700 p-2 rounded-lg max-w-xs">
                     {message}
                 </div>
             </div>
         );
     }
     return (
-        <div className="flex items-center mb-2">
+        <div className="mb-2">
             {msg}
         </div>
     );
