@@ -17,11 +17,8 @@ class ResponseSchema(BaseModel):
 
 class GeminiClient:
     def __init__(self, model = "gemini-2.0-flash"):
-        try:
-            dotenv.load_dotenv()
-            GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-        except Exception as e:
-            raise Exception("GEMINI_API_KEY not found in environment variables") from e
+        dotenv.load_dotenv()
+        GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
         self.client = genai.Client(api_key=GEMINI_API_KEY)
         self.model = model
