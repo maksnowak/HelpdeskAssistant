@@ -74,7 +74,7 @@ npm run preview
 ```
 10. Open your web browser and navigate to `http://localhost:4173` to access the Helpdesk Assistant.
 ---
-Alternatively, you can launch the frontend server in development mode:
+Alternatively, you can launch the frontend server in development mode (the website will be available at `http://localhost:5173`):
 
 ```bash
 npm run dev
